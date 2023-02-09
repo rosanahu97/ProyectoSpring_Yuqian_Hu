@@ -1,4 +1,5 @@
 package es.rf.tienda.dominio;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import es.rf.tienda.exception.DomainException;
 import es.rf.tienda.util.Validator;
@@ -32,9 +33,7 @@ public class Categoria {
 	
 	
 	public Categoria(){}
-	
-	
-	
+		
 	/**
 	 * Getter para identificador de categoria
 	 * @return Integer con el id de la categoria
@@ -92,7 +91,29 @@ public class Categoria {
 		
 		this.cat_descripcion = cat_descripcion;
 	}
+	@Transient
+	@JsonIgnore
+	public boolean isValidaInsert() {
+		
+		if(Validator.cumpleLongitud(cat_nombre,5,50)) {
+			return true;
+		}else {
+			return false;
 
+		}	
+	}
+	@Transient
+	@JsonIgnore
+	public boolean isValidaUpdate() {
+		if(getId_categoria()>0 && Validator.cumpleLongitud(cat_nombre,5,50)) {
+			return true;
+		}else {
+			return false;
+
+		}	
+	}
+	
+	
 
 	@Override
 	public int hashCode() {

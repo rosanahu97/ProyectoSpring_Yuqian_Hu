@@ -1,6 +1,8 @@
 package es.rf.tienda.service;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -10,15 +12,85 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import es.rf.tienda.dominio.Categoria;
+import es.rf.tienda.exception.DAOException;
 import es.rf.tienda.interfacesDaos.ICategoriaRepo;
 
+@Service
 public class ServicioCategoria implements IServicioCategoria {
+	
+	@Autowired
+	private ICategoriaRepo cDao;
+	
+	public Categoria leerUno(int id) throws DAOException {
+		Categoria res = null;
+		try {	
+			res =cDao.findById(id).get();
+		}catch(IllegalArgumentException e) {
+			throw new DAOException("Id nulo");
+		}catch(NoSuchElementException e) {
+			throw new DAOException("No existe categoria con id: "+id);
+		}
+		return res;
+		
+	}
+	
+	public List<Categoria>leerTodos(){
+		return cDao.findAll();
+		
+	}
 
-	
-	
-	//@Autowired
-	//private ICategoriaRepo cDao;
-	//implementar los metodos save find delete etc
+	public void actualizar(Categoria categoria) throws DAOException  {
+		if(categoria.isValidaUpdate()) {
+			try {
+				cDao.save(categoria);
+				
+			}catch(NoSuchElementException e) {
+				throw new DAOException("No existe categoria con id: "+categoria.getId_categoria());
+			}
+		}
+	}
+
+	public void delete(Categoria categoria) throws DAOException  {
+		
+		try {	
+			cDao.delete(categoria);
+		}catch(IllegalArgumentException e) {
+			throw new DAOException("Id nulo");
+		}catch(NoSuchElementException e) {
+			throw new DAOException("No existe categoria con id: "+categoria.getId_categoria());
+		}
+	}
+
+	public void delete( int categoria_id) throws DAOException  {
+		
+		try {	
+			cDao.deleteById(categoria_id);
+		}catch(IllegalArgumentException e) {
+			throw new DAOException("Id nulo");
+		}catch(NoSuchElementException e) {
+			throw new DAOException("No existe categoria con id: "+categoria_id);
+		}
+		
+	}
+
+	public void insert(Categoria categoria) throws DAOException {
+		
+		if(categoria.isValidaInsert()) {
+			try {
+				cDao.save(categoria);				
+			}catch(IllegalArgumentException e) {
+				throw new DAOException("Parametros incorrecto: "+categoria.getId_categoria());
+			}
+		}
+	}
+
 }

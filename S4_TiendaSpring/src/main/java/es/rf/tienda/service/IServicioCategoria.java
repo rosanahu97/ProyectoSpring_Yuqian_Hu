@@ -1,9 +1,6 @@
 package es.rf.tienda.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import es.rf.tienda.dominio.Categoria;

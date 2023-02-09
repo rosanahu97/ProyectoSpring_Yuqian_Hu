@@ -1,6 +1,5 @@
 package es.rf.tienda.controller;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.rf.tienda.dominio.Categoria;
 import es.rf.tienda.exception.DAOException;
-import es.rf.tienda.interfacesDaos.ICategoriaRepo;
 import es.rf.tienda.service.IServicioCategoria;
 
 @RestController

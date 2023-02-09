@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.rf.tienda.dominio.Categoria;
 import es.rf.tienda.exception.DAOException;
-import es.rf.tienda.service.IServicioCategoria;
+import es.rf.tienda.service.IServicio;
 
 @RestController
 @RequestMapping("/Categoria")
 public class CategoriaController {
 
 	@Autowired
-	private IServicioCategoria cDao;
+	private IServicio cDao;
 	
 
 	@GetMapping
@@ -32,8 +32,8 @@ public class CategoriaController {
 	}
 
 	@GetMapping("/{id}")
-	public Categoria leerUno(@PathVariable("id") int id) throws DAOException {
-		return cDao.leerUno(id);
+	public Categoria leerUno(@PathVariable("id") Integer id) throws DAOException {
+		return (Categoria) cDao.leerUno(id);
 
 	}
 
@@ -50,7 +50,7 @@ public class CategoriaController {
 	}
 
 	@DeleteMapping("/{id}")
-	public String[] delete(@PathVariable("id") int categoria_id) throws DAOException {
+	public String[] delete(@PathVariable("id") Integer categoria_id) throws DAOException {
 		cDao.delete(categoria_id);		
 		return new String[] { "200", "Categoria eliminada" };
 	}

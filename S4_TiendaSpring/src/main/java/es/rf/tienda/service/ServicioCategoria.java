@@ -10,12 +10,12 @@ import es.rf.tienda.exception.DAOException;
 import es.rf.tienda.interfacesDaos.ICategoriaRepo;
 
 @Service
-public class ServicioCategoria implements IServicioCategoria {
+public class ServicioCategoria implements IServicio<Categoria,Integer> {
 	
 	@Autowired
 	private ICategoriaRepo cDao;
 	
-	public Categoria leerUno(int id) throws DAOException {
+	public Categoria leerUno(Integer id) throws DAOException {
 		Categoria res = null;
 		try {	
 			res =cDao.findById(id).get();
@@ -55,7 +55,7 @@ public class ServicioCategoria implements IServicioCategoria {
 		}
 	}
 
-	public void delete( int categoria_id) throws DAOException  {
+	public void delete(Integer categoria_id) throws DAOException  {
 		
 		try {	
 			cDao.deleteById(categoria_id);
@@ -77,5 +77,7 @@ public class ServicioCategoria implements IServicioCategoria {
 			}
 		}
 	}
+
+
 
 }

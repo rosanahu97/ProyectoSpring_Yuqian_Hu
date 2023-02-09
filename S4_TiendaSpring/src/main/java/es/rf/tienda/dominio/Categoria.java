@@ -104,6 +104,7 @@ public class Categoria {
 	@Transient
 	@JsonIgnore
 	public boolean isValidaUpdate() {
+		
 		if(getId_categoria()>0 && Validator.cumpleLongitud(cat_nombre,5,50)) {
 			return true;
 		}else {

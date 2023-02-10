@@ -14,10 +14,7 @@ import es.rf.tienda.exception.DomainException;
 import es.rf.tienda.interfacesDaos.ICategoriaRepo;
 
 class ServicioCategoriaTest {
-	
-	
-	private ICategoriaRepo iCategoriaRepo; 
-	
+		
 	private ServicioCategoria servicioCategoria;
 	
 	private Categoria categoria1;
@@ -25,7 +22,6 @@ class ServicioCategoriaTest {
 	
 	@BeforeEach
 	void inicio() throws DomainException {
-		iCategoriaRepo = mock(ICategoriaRepo.class);
 		servicioCategoria = mock(ServicioCategoria.class);
 		categoria1 = new Categoria();
 		categoria1.setId_categoria(5);

@@ -1,7 +1,6 @@
 package es.rf.tienda.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,53 +14,54 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.rf.tienda.dominio.Categoria;
+import es.rf.tienda.dominio.Usuario;
 import es.rf.tienda.exception.DAOException;
 import es.rf.tienda.service.IServicio;
 
 @RestController
-@RequestMapping("/Categoria")
-public class CategoriaController {
+@RequestMapping("/Usuario")
+public class UsuarioController {
 
 	@Autowired
-	@Qualifier("ServicioCategoria")
+	@Qualifier("ServicioUsuario")
 	private IServicio cDao;
 	
 
 	@GetMapping
-	public List<Categoria> leerTodos() {
+	public List<Usuario> leerTodos() {
 		return cDao.leerTodos();
 
 	}
 
 	@GetMapping("/{id}")
-	public Map<String,Categoria> leerUno(@PathVariable("id") Integer id) throws DAOException {
-		return  cDao.leerUno(id);
+	public Usuario leerUno(@PathVariable("id") Integer id) throws DAOException {
+		return (Usuario) cDao.leerUno(id);
 
 	}
 
 	@PutMapping
-	public String[] actualizar(@RequestBody Categoria categoria) throws DAOException {
-		cDao.actualizar(categoria);
-		return new String[] { "200", "Categoria actualizada" };
+	public String[] actualizar(@RequestBody Usuario usuario) throws DAOException {
+		cDao.actualizar(usuario);
+		return new String[] { "200", "Usuario actualizada" };
 	}
 
 	@DeleteMapping
-	public String[] delete(Categoria categoria) throws DAOException {
-		cDao.delete(categoria);
-		return new String[] { "200", "Categoria eliminada" };
+	public String[] delete(Usuario usuario) throws DAOException {
+		cDao.delete(usuario);
+		return new String[] { "200", "Usuario eliminada" };
 	}
 
 	@DeleteMapping("/{id}")
-	public String[] delete(@PathVariable("id") Integer categoria_id) throws DAOException {
-		cDao.delete(categoria_id);		
-		return new String[] { "200", "Categoria eliminada" };
+	public String[] delete(@PathVariable("id") Integer usuario_id) throws DAOException {
+		cDao.delete(usuario_id);		
+		return new String[] { "200", "Usuario eliminada" };
 	}
 
 	@PostMapping
-	public String[] insert(@RequestBody Categoria categoria) throws DAOException {
-		categoria.setId_categoria(0);
-		cDao.insert(categoria);
-		return new String[] { "200", "Categoria insertada" };
+	public String[] insert(@RequestBody Usuario usuario) throws DAOException {
+		usuario.setId_usuario(0);
+		cDao.insert(usuario);
+		return new String[] { "200", "Usuario insertada" };
 
 	}
 

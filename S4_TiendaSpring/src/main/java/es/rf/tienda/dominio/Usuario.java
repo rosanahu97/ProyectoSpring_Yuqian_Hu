@@ -4,6 +4,18 @@ import java.time.LocalDate;
 
 import es.rf.tienda.exception.DomainException;
 import es.rf.tienda.util.Validator;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 /**
  * 
  * Nombre		Uusario
@@ -12,17 +24,52 @@ import es.rf.tienda.util.Validator;
  * @version		Enero de 2023
  *
  */
+@Entity
+@Table(name = "Usuario")
 public class Usuario {
 	//definir las variables 
+	@Id
+	@GeneratedValue(strategy = GenerationType.TABLE)
 	private int id_usuario;
+	@Column(nullable =false)
 	private String user_nombre;
+	@Column(nullable =false)
 	private String user_email;
+	@Column(nullable =false)
 	private String user_pass;
-	private int user_tipo;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_tipo.id_tipo")
+	
+	private Tipo user_tipo;
+	@Column
 	private String user_dni;
+	@Column(updatable = false)
 	private LocalDate user_fecAlta;
+	@Column
 	private LocalDate user_fecConfirmacion;
+	@Embedded
+	@AttributeOverrides({
+		  @AttributeOverride( name = "dir_nombre", column = @Column(name = "dir_nombre_pago")),
+		  @AttributeOverride( name = "dir_direccion", column = @Column(name = "dir_direccion_pago")),
+		  @AttributeOverride( name = "dir_poblacion", column = @Column(name = "dir_poblacion_pago")),
+		  @AttributeOverride( name = "dir_cPostal", column = @Column(name = "dir_cPostal_pago")),
+		  @AttributeOverride( name = "dir_provincia", column = @Column(name = "dir_provincia_pago")),
+		  @AttributeOverride( name = "dir_pais", column = @Column(name = "dir_pais_pago")),
+		  @AttributeOverride( name = "dir_correoE", column = @Column(name = "dir_correoE_pago"))
+		})
+	
 	private Direccion datos_pago;
+	@Embedded
+	@AttributeOverrides({
+		  @AttributeOverride( name = "dir_nombre", column = @Column(name = "dir_nombre_envio")),
+		  @AttributeOverride( name = "dir_direccion", column = @Column(name = "dir_direccion_envio")),
+		  @AttributeOverride( name = "dir_poblacion", column = @Column(name = "dir_poblacion_envio")),
+		  @AttributeOverride( name = "dir_cPostal", column = @Column(name = "dir_cPostal_envio")),
+		  @AttributeOverride( name = "dir_provincia", column = @Column(name = "dir_provincia_envio")),
+		  @AttributeOverride( name = "dir_pais", column = @Column(name = "dir_pais_envio")),
+		  @AttributeOverride( name = "dir_correoE", column = @Column(name = "dir_correoE_envio"))
+		})
 	private Direccion datos_envio;
 	
 	//crear constructor con o sin parametros
@@ -43,7 +90,7 @@ public class Usuario {
 	}
 
 	public void setUser_nombre(String user_nombre) throws DomainException {
-		if(!Validator.cumpleLongitud(user_nombre,0, 200)) {
+		if(!Validator.cumpleLongitud(user_nombre,5, 100)) {
 			throw new DomainException("Nombre longitud incorrecto");
 		}
 		
@@ -56,7 +103,7 @@ public class Usuario {
 
 	public void setUser_email(String user_email) throws DomainException {
 		
-		if(!Validator.cumpleLongitud(user_email,0, 200)) {
+		if(!Validator.isEmailValido(user_email)&&!Validator.cumpleLongitud(user_email,6, 100)) {
 			throw new DomainException("Email longitud incorrecto");
 		}
 		this.user_email = user_email;
@@ -75,11 +122,11 @@ public class Usuario {
 		this.user_pass = user_pass;
 	}
 
-	public int getUser_tipo() {
+	public Tipo getUser_tipo() {
 		return user_tipo;
 	}
 
-	public void setUser_tipo(int user_tipo) {
+	public void setUser_tipo(Tipo user_tipo) {
 		this.user_tipo = user_tipo;
 	}
 

@@ -1,15 +1,14 @@
 package es.rf.tienda.dominio;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import es.rf.tienda.exception.DomainException;
+import es.rf.tienda.interfaces.Modelo;
 import es.rf.tienda.util.Validator;
+import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 /**
  * 
@@ -21,11 +20,11 @@ import jakarta.persistence.Transient;
  */
 @Entity
 @Table(name = "Categoria")
-public class Categoria {
+public class Categoria implements Modelo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	private int id_categoria;			//identificador categoria
-	@Column
+	@Column(nullable=false)
 	private String cat_nombre;			//nombre de la categoria
 	@Column
 	private String cat_descripcion;		//descripcion de la categoria
@@ -75,7 +74,7 @@ public class Categoria {
 	 * @return cadena con la descripcion de la categoria
 	 */
 	public String getCat_descripcion() {
-		return cat_descripcion;
+		return cat_descripcion==null?null:StringUtils.truncate(cat_descripcion,200);
 	}
 	
 	/**
@@ -83,15 +82,12 @@ public class Categoria {
 	 * @throws DomainException 
 	 * 
 	 */
-	public void setCat_descripcion(String cat_descripcion) throws DomainException {
-		if(!Validator.cumpleLongitud(cat_descripcion,0,200)) {
-			throw new DomainException("Descripcion con longitud incorrecto");
-		}
+	public void setCat_descripcion(String cat_descripcion) {
 		
 		this.cat_descripcion = cat_descripcion;
 	}
-	@Transient
-	@JsonIgnore
+	
+	@Override
 	public boolean isValidaInsert() {
 		
 		if(Validator.cumpleLongitud(cat_nombre,5,50)) {
@@ -101,8 +97,7 @@ public class Categoria {
 
 		}	
 	}
-	@Transient
-	@JsonIgnore
+	@Override
 	public boolean isValidaUpdate() {
 		
 		if(getId_categoria()>0 && Validator.cumpleLongitud(cat_nombre,5,50)) {

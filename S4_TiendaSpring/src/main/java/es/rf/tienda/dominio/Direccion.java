@@ -2,6 +2,7 @@ package es.rf.tienda.dominio;
 
 import es.rf.tienda.exception.DomainException;
 import es.rf.tienda.util.Validator;
+import jakarta.persistence.Embeddable;
 
 /**
  * 
@@ -11,6 +12,7 @@ import es.rf.tienda.util.Validator;
  * @version		Enero de 2023
  *
  */
+@Embeddable
 public class Direccion {
 	//definir las variables de la clase direccion
 	private String dir_nombre;
@@ -28,9 +30,7 @@ public class Direccion {
 		return dir_nombre;
 	}
 	public void setDir_nombre(String dir_nombre) throws DomainException {
-		if(!Validator.cumpleLongitud(dir_nombre, 5, 100)) {
-			throw new DomainException("Direccion con longitud incorrecto");
-		}
+		
 		this.dir_nombre = dir_nombre;
 	}
 	public String getDir_direccion() {

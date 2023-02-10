@@ -1,8 +1,11 @@
 package es.rf.tienda.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import es.rf.tienda.dominio.Categoria;
@@ -10,21 +13,31 @@ import es.rf.tienda.exception.DAOException;
 import es.rf.tienda.interfacesDaos.ICategoriaRepo;
 
 @Service
-public class ServicioCategoria implements IServicio<Categoria,Integer> {
+@Component("ServicioCategoria")
+public class ServicioCategoria implements IServicio<Categoria,Integer,String> {
 	
 	@Autowired
 	private ICategoriaRepo cDao;
 	
-	public Categoria leerUno(Integer id) throws DAOException {
+	public Map<String,Categoria> leerUno(Integer id) throws DAOException {
+		Map<String,Categoria>map = new HashMap<>();
 		Categoria res = null;
 		try {	
 			res =cDao.findById(id).get();
+			map.put("Datos", res);
+			return map;
+
 		}catch(IllegalArgumentException e) {
-			throw new DAOException("Id nulo");
+			map.put("Error", res);
+			return map;
 		}catch(NoSuchElementException e) {
-			throw new DAOException("No existe categoria con id: "+id);
+			map.put("Error", res);
+
+			return map;
+
 		}
-		return res;
+		
+		
 		
 	}
 	

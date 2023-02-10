@@ -15,8 +15,9 @@ class CategoriaTest {
 	final static int ID_ERROR=0;
 	final static String NOMBRE="ROSANA";
 	final static String NOMBRE_ERROR ="HU";
+	final static String NOMBRE_ERROR_2 ="";
 	final static String DESCRIPCION ="UNA DESCRPCION CORRECTA";
-	final static String DESCRIPCION_ERROR="";
+	final static String DESCRIPCION_NULL="";
 	
 	@BeforeEach
 	void inicio() {
@@ -39,7 +40,10 @@ class CategoriaTest {
 	void testSetCat_nombre_error() throws DomainException {
 		Assertions.assertThrows(DomainException.class, ()->categoria.setCat_nombre(NOMBRE_ERROR));
 	}
-
+	@Test
+	void testSetCat_nombre_error_2() throws DomainException {
+		Assertions.assertThrows(DomainException.class, ()->categoria.setCat_nombre(NOMBRE_ERROR_2));
+	}
 	@Test
 	void testSetCat_descripcion() throws DomainException {
 		categoria.setCat_descripcion(DESCRIPCION);
@@ -47,9 +51,9 @@ class CategoriaTest {
 
 	}
 	@Test
-	void testSetCat_descripcion_error() throws DomainException {
-		Assertions.assertThrows(DomainException.class, ()->categoria.setCat_descripcion(DESCRIPCION_ERROR));
-	}
+	void testSetCat_descripcion_null()  {
+		categoria.setCat_descripcion(DESCRIPCION_NULL);
+		Assertions.assertEquals(categoria.getCat_descripcion(), DESCRIPCION_NULL);	}
 
 	@Test
 	void testIsValidaInsert() throws DomainException {

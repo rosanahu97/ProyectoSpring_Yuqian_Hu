@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import es.rf.tienda.dominio.Categoria;
 import es.rf.tienda.exception.DAOException;
+import es.rf.tienda.exception.DomainException;
 import es.rf.tienda.interfacesDaos.ICategoriaRepo;
 
 @Service
@@ -46,6 +47,9 @@ public class ServicioCategoria implements IServicio<Categoria,Integer> {
 			}catch(NoSuchElementException e) {
 				throw new DAOException("No existe categoria con id: "+categoria.getId_categoria());
 			}
+		}else {
+			throw new DAOException("No existe categoria con id: "+categoria.getId_categoria());
+
 		}
 	}
 
@@ -66,16 +70,15 @@ public class ServicioCategoria implements IServicio<Categoria,Integer> {
 	}
 
 	public void insert(Categoria categoria) throws DAOException {
-		
 		if(categoria.isValidaInsert()) {
 			try {
-				cDao.save(categoria);				
+				cDao.save(categoria);
+				
 			}catch(IllegalArgumentException e) {
-				throw new DAOException("Parametros incorrecto: "+categoria.getId_categoria());
+				throw new DAOException("Objeto nulo ");
 			}
+		}else {
+			throw new DAOException("Parametros incorrecto ");
 		}
-	}
-
-
-
+}
 }

@@ -16,22 +16,21 @@ import es.rf.tienda.interfacesDaos.IUsuarioRepo;
 
 @Service
 @Component("ServicioUsuario")
-public class ServicioUsuario implements IServicio<Usuario,Integer,String>{
+public class ServicioUsuario implements IServicio<Usuario,Integer>{
 
 	@Autowired
 	private IUsuarioRepo cDao;
 	
-	public Map<String,Usuario> leerUno(Integer id) throws DAOException {
-		Map<String,Usuario> map = new HashMap<String,Usuario>();
+	public Usuario leerUno(Integer id) {
 		Usuario res = null;
 		try {	
 			res =cDao.findById(id).get();
 		}catch(IllegalArgumentException e) {
-			throw new DAOException("Id nulo");
+			return res;
 		}catch(NoSuchElementException e) {
-			throw new DAOException("No existe categoria con id: "+id);
+			return res;
 		}
-		return map;
+		return res;
 		
 	}
 	

@@ -14,31 +14,23 @@ import es.rf.tienda.interfacesDaos.ICategoriaRepo;
 
 @Service
 @Component("ServicioCategoria")
-public class ServicioCategoria implements IServicio<Categoria,Integer,String> {
+public class ServicioCategoria implements IServicio<Categoria,Integer> {
 	
 	@Autowired
 	private ICategoriaRepo cDao;
 	
-	public Map<String,Categoria> leerUno(Integer id) throws DAOException {
-		Map<String,Categoria>map = new HashMap<>();
+	public Categoria leerUno(Integer id){
 		Categoria res = null;
 		try {	
 			res =cDao.findById(id).get();
-			map.put("Datos", res);
-			return map;
-
+			
+			//En el caso de lanzar las excepciones, devuelve objeto nulo 
 		}catch(IllegalArgumentException e) {
-			map.put("Error", res);
-			return map;
+			return res;
 		}catch(NoSuchElementException e) {
-			map.put("Error", res);
-
-			return map;
-
+			return res;
 		}
-		
-		
-		
+		return res;
 	}
 	
 	public List<Categoria>leerTodos(){
@@ -57,26 +49,19 @@ public class ServicioCategoria implements IServicio<Categoria,Integer,String> {
 		}
 	}
 
-	public void delete(Categoria categoria) throws DAOException  {
-		
-		try {	
-			cDao.delete(categoria);
-		}catch(IllegalArgumentException e) {
-			throw new DAOException("Id nulo");
-		}catch(NoSuchElementException e) {
-			throw new DAOException("No existe categoria con id: "+categoria.getId_categoria());
-		}
+	public void delete(Categoria categoria) throws DAOException{
+			delete(categoria.getId_categoria());
 	}
 
 	public void delete(Integer categoria_id) throws DAOException  {
-		
-		try {	
-			cDao.deleteById(categoria_id);
-		}catch(IllegalArgumentException e) {
-			throw new DAOException("Id nulo");
-		}catch(NoSuchElementException e) {
-			throw new DAOException("No existe categoria con id: "+categoria_id);
-		}
+			try {	
+				cDao.deleteById(categoria_id);
+			}catch(IllegalArgumentException e) {
+				throw new DAOException("Id nulo");
+			}catch(NoSuchElementException e) {
+				throw new DAOException("No existe categoria con id: "+categoria_id);
+			}
+
 		
 	}
 

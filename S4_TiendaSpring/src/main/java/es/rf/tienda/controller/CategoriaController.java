@@ -2,6 +2,7 @@ package es.rf.tienda.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import es.rf.tienda.dominio.Categoria;
 import es.rf.tienda.exception.DAOException;
 import es.rf.tienda.service.IServicio;
+import es.rf.tienda.util.Mensajes;
 
 @RestController
 @RequestMapping("/Categoria")
@@ -25,7 +27,6 @@ public class CategoriaController {
 	@Autowired
 	@Qualifier("ServicioCategoria")
 	private IServicio cDao;
-	
 
 	@GetMapping
 	public List<Categoria> leerTodos() {
@@ -34,34 +35,87 @@ public class CategoriaController {
 	}
 
 	@GetMapping("/{id}")
-	public Map<String,Categoria> leerUno(@PathVariable("id") Integer id) throws DAOException {
-		return  cDao.leerUno(id);
+	public Mensajes leerUno(@PathVariable("id") String id) {
+		if (id != null) {
+			// si el id no es nulo
+			try {
+				int id_numeric = Integer.parseInt(id);
+				Categoria cat = (Categoria) cDao.leerUno(id_numeric);
+				// si no existe categoria con id id_numeric devuelve un mensaje de error
+				if (cat == null) {
+					return new Mensajes("500", "Categoria" + id_numeric + "no existe", cat);
+					// en caso contrario devuelve el objeto con codigo 200
+				} else {
+					return new Mensajes("200", "", cat);
+				}
+				// si el id contiene caracteres, devuelve un mensaje de error
+			} catch (NumberFormatException e) {
+				return new Mensajes("500", "Id categoria formato incorrecto", null);
+			}
+		} else {
+			// si el id es nulo
+			return new Mensajes("500", "Id nulo", null);
+		}
 
 	}
 
 	@PutMapping
-	public String[] actualizar(@RequestBody Categoria categoria) throws DAOException {
-		cDao.actualizar(categoria);
-		return new String[] { "200", "Categoria actualizada" };
+	public Mensajes actualizar(@RequestBody Categoria categoria) {
+		try {
+			cDao.actualizar(categoria);
+			return new Mensajes("200", "Categoria actualizada", categoria);
+
+		} catch (DAOException e) {
+			return new Mensajes("500", "Error actualizacion", null);
+
+		}
 	}
 
 	@DeleteMapping
-	public String[] delete(Categoria categoria) throws DAOException {
-		cDao.delete(categoria);
-		return new String[] { "200", "Categoria eliminada" };
+	public Mensajes delete(Categoria categoria) {
+		try {
+			cDao.delete(categoria);
+			return new Mensajes("200", "Categoria eliminada", categoria);
+
+		} catch (DAOException e) {
+			return new Mensajes("500", "Error eliminar categoria", null);
+
+		}
 	}
 
 	@DeleteMapping("/{id}")
-	public String[] delete(@PathVariable("id") Integer categoria_id) throws DAOException {
-		cDao.delete(categoria_id);		
-		return new String[] { "200", "Categoria eliminada" };
+	public Mensajes delete(@PathVariable("id") String categoria_id) {
+		if (categoria_id != null) {
+			// si el id no es nulo
+			try {
+				int id_numeric = Integer.parseInt(categoria_id);
+				cDao.delete(id_numeric);
+				return new Mensajes("200", "Categoria eliminada", null);
+				// si el id contiene caracteres, devuelve un mensaje de error
+			} catch (NumberFormatException e) {
+				return new Mensajes("500", "Id categoria formato incorrecto", null);
+				// si no existe categoria con id id_numeric devuelve un mensaje de error
+			} catch (DAOException e) {
+				return new Mensajes("500", "Categoria no existe", null);
+			} 
+		} else {
+			// si el id es nulo
+			return new Mensajes("500", "Id nulo", null);
+		}
+
 	}
 
 	@PostMapping
-	public String[] insert(@RequestBody Categoria categoria) throws DAOException {
+	public Mensajes insert(@RequestBody Categoria categoria){
 		categoria.setId_categoria(0);
-		cDao.insert(categoria);
-		return new String[] { "200", "Categoria insertada" };
+		try {
+			cDao.insert(categoria);
+			return new Mensajes("200", "Categoria insertada", null);
+
+		} catch (DAOException e) {
+			return new Mensajes("500", "Error insertar categoria", null);
+
+		}
 
 	}
 

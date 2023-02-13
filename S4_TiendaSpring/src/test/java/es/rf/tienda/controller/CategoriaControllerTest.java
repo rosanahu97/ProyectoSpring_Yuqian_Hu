@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import es.rf.tienda.dominio.Categoria;
+import es.rf.tienda.exception.DAOException;
 import es.rf.tienda.exception.DomainException;
 import es.rf.tienda.util.Mensajes;
 
@@ -19,6 +20,8 @@ class CategoriaControllerTest {
 
 	private Categoria categoria1;
 	private Categoria categoria2;
+	private Categoria categoria3;
+
 
 	@BeforeEach
 	void inicio() throws DomainException {
@@ -32,6 +35,11 @@ class CategoriaControllerTest {
 		categoria2.setId_categoria(10);
 		categoria2.setCat_nombre("Extra");
 		categoria2.setCat_descripcion("Descripcion categoria dos");
+		
+		categoria3 = new Categoria();
+		categoria3.setId_categoria(15);
+		categoria3.setCat_nombre("Peq");
+		categoria3.setCat_descripcion("Categoria con nombre incorrecto");
 	
 	}
 	
@@ -64,6 +72,18 @@ class CategoriaControllerTest {
 		Mensajes res = controlador.leerUno("10");
 		Assertions.assertNotEquals(res,m1);
 	}
+	
+	@Test
+	void testLeerUno_Exception() {
+		Mensajes m1 = new Mensajes("500", "Categoria no existe",null);
+		when(controlador.leerUno("90")).thenReturn(m1);	
+		Mensajes res = controlador.leerUno("90");
+		Assertions.assertEquals(res,m1);
+	
+	}
+	
+	
+	
 	@Test
 	void testActualizar() {
 		Mensajes m1 = new Mensajes("200", "Categoria actualizada", categoria1);
@@ -72,6 +92,16 @@ class CategoriaControllerTest {
 		Assertions.assertEquals(res,m1);
 
 	}
+	
+	
+	@Test
+	void testActualizar_Exception() {
+		Mensajes m1 =new Mensajes("500", "Error actualizacion", null);
+		when(controlador.actualizar(categoria3)).thenReturn(m1);	
+		Mensajes res = controlador.actualizar(categoria3);
+		Assertions.assertEquals(res,m1);
+	}
+	
 	@Test
 	void testActualizar_2() {
 		Mensajes m1 = new Mensajes("200", "Categoria actualizada", categoria1);
@@ -125,6 +155,13 @@ class CategoriaControllerTest {
 		when(controlador.insert(categoria1)).thenReturn(m1);
 		Mensajes res = controlador.insert(categoria2);
 		Assertions.assertNotEquals(res,m1);
+	}
+	@Test
+	void testInsertar_Exception() {
+		Mensajes m1 =new  Mensajes("500", "Error insertar categoria", null);
+		when(controlador.insert(categoria3)).thenReturn(m1);	
+		Mensajes res = controlador.insert(categoria3);
+		Assertions.assertEquals(res,m1);
 	}
 
 }

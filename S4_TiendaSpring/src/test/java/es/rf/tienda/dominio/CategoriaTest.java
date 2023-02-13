@@ -36,14 +36,7 @@ class CategoriaTest {
 		categoria.setCat_nombre(NOMBRE);
 		Assertions.assertEquals(categoria.getCat_nombre(), NOMBRE);
 	}
-	@Test
-	void testSetCat_nombre_error() throws DomainException {
-		Assertions.assertThrows(DomainException.class, ()->categoria.setCat_nombre(NOMBRE_ERROR));
-	}
-	@Test
-	void testSetCat_nombre_error_2() throws DomainException {
-		Assertions.assertThrows(DomainException.class, ()->categoria.setCat_nombre(NOMBRE_ERROR_2));
-	}
+
 	@Test
 	void testSetCat_descripcion() throws DomainException {
 		categoria.setCat_descripcion(DESCRIPCION);
@@ -60,7 +53,20 @@ class CategoriaTest {
 		categoria.setCat_nombre(NOMBRE);
 		Assertions.assertTrue(categoria.isValidaInsert());
 	}
+	@Test
+	void testIsValidaInsert_Error() throws DomainException {
+		categoria.setId_categoria(ID);
+		categoria.setCat_nombre(NOMBRE_ERROR);
+		Assertions.assertThrows(DomainException.class, ()->categoria.isValidaInsert());
 
+	}
+	@Test
+	void testIsValidaInsert_Error_2() throws DomainException {
+		categoria.setId_categoria(ID);
+		categoria.setCat_nombre(NOMBRE_ERROR_2);
+		Assertions.assertThrows(DomainException.class, ()->categoria.isValidaInsert());
+
+	}
 	@Test
 	void testIsValidaUpdate() throws DomainException {
 		categoria.setId_categoria(ID);
@@ -72,7 +78,8 @@ class CategoriaTest {
 	void testIsValidaUpdate_Error() throws DomainException {
 		categoria.setId_categoria(ID_ERROR);
 		categoria.setCat_nombre(NOMBRE);
-		Assertions.assertFalse(categoria.isValidaUpdate());
+		Assertions.assertThrows(DomainException.class, ()->categoria.isValidaUpdate());
+
 	}
 
 }

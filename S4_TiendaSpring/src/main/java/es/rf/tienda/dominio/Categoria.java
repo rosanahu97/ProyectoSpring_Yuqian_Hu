@@ -74,17 +74,19 @@ public class Categoria implements Modelo {
 	 * @return cadena con la descripcion de la categoria
 	 */
 	public String getCat_descripcion() {
-		return cat_descripcion==null?null:StringUtils.truncate(cat_descripcion,200);
+		return cat_descripcion;
 	}
 	
 	/**
-	 * setter para la descripcion de categoria
-	 * @throws DomainException 
-	 * 
+	 * setter para la descripcion de categoria 
 	 */
 	public void setCat_descripcion(String cat_descripcion) {
-		
-		this.cat_descripcion = cat_descripcion;
+		if(cat_descripcion !=null) {
+			String res =StringUtils.truncate(cat_descripcion,200);
+			this.cat_descripcion=cat_descripcion;
+		}else {
+			this.cat_descripcion =null;
+		}
 	}
 	
 	@Override

@@ -39,18 +39,18 @@ public class ServicioCategoria implements IServicio<Categoria,Integer> {
 		
 	}
 
-	public void actualizar(Categoria categoria) throws DAOException  {
-		if(categoria.isValidaUpdate()) {
+	public void actualizar(Categoria categoria) throws DAOException{
 			try {
+				if(categoria.isValidaUpdate()) {
+
 				cDao.save(categoria);
-				
+				}
 			}catch(NoSuchElementException e) {
 				throw new DAOException("No existe categoria con id: "+categoria.getId_categoria());
-			}
-		}else {
-			throw new DAOException("No existe categoria con id: "+categoria.getId_categoria());
+			} catch (DomainException e) {
+				throw new DAOException("Parametros incorrectos: "+categoria.getId_categoria());
 
-		}
+			}
 	}
 
 	public void delete(Categoria categoria) throws DAOException{
@@ -70,15 +70,17 @@ public class ServicioCategoria implements IServicio<Categoria,Integer> {
 	}
 
 	public void insert(Categoria categoria) throws DAOException {
-		if(categoria.isValidaInsert()) {
+		
 			try {
+				if(categoria.isValidaInsert()) {
 				cDao.save(categoria);
-				
+				}
 			}catch(IllegalArgumentException e) {
 				throw new DAOException("Objeto nulo ");
+			} catch (DomainException e) {
+				throw new DAOException("Parametro incorrecto ");
+
 			}
-		}else {
-			throw new DAOException("Parametros incorrecto ");
-		}
+		
 }
 }

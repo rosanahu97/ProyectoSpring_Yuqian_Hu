@@ -61,11 +61,7 @@ public class Categoria implements Modelo {
 	 * @throws DomainException 
 	 * 
 	 */
-	public void setCat_nombre(String cat_nombre) throws DomainException {
-		if(!Validator.cumpleLongitud(cat_nombre,5,50)) {
-			throw new DomainException("Nombre con longitud incorrecto");
-		}
-		
+	public void setCat_nombre(String cat_nombre) throws DomainException {	
 		this.cat_nombre = cat_nombre;
 	}
 	
@@ -90,22 +86,22 @@ public class Categoria implements Modelo {
 	}
 	
 	@Override
-	public boolean isValidaInsert() {
+	public boolean isValidaInsert() throws DomainException {
 		
-		if(Validator.cumpleLongitud(cat_nombre,5,50)) {
+		if(Validator.cumpleLongitud(getCat_nombre(),5,50)) {
 			return true;
 		}else {
-			return false;
+			throw new DomainException("Nombre con longitud incorrecto");
 
 		}	
 	}
 	@Override
-	public boolean isValidaUpdate() {
+	public boolean isValidaUpdate() throws DomainException {
 		
 		if(getId_categoria()>0 && Validator.cumpleLongitud(cat_nombre,5,50)) {
 			return true;
 		}else {
-			return false;
+			throw new DomainException("Nombre con longitud incorrecto");
 
 		}	
 	}

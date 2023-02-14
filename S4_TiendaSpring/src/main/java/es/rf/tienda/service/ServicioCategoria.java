@@ -53,9 +53,6 @@ public class ServicioCategoria implements IServicio<Categoria,Integer> {
 			}
 	}
 
-	public void delete(Categoria categoria) throws DAOException{
-			delete(categoria.getId_categoria());
-	}
 
 	public void delete(Integer categoria_id) throws DAOException  {
 			try {	

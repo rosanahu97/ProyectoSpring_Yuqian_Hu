@@ -62,6 +62,10 @@ public class Categoria implements Modelo {
 	 * 
 	 */
 	public void setCat_nombre(String cat_nombre) throws DomainException {	
+		if(!Validator.cumpleLongitud(cat_nombre, 5, 20)) {
+			throw new DomainException("Nombre con longitud incorrecto");
+		}
+		
 		this.cat_nombre = cat_nombre;
 	}
 	
@@ -91,7 +95,7 @@ public class Categoria implements Modelo {
 		if(Validator.cumpleLongitud(getCat_nombre(),5,50)) {
 			return true;
 		}else {
-			throw new DomainException("Nombre con longitud incorrecto");
+			return false;
 
 		}	
 	}
@@ -101,7 +105,7 @@ public class Categoria implements Modelo {
 		if(getId_categoria()>0 && Validator.cumpleLongitud(cat_nombre,5,50)) {
 			return true;
 		}else {
-			throw new DomainException("Nombre con longitud incorrecto");
+			return false;
 
 		}	
 	}

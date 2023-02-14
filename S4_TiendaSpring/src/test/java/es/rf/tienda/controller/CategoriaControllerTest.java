@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +23,8 @@ class CategoriaControllerTest {
 	private Categoria categoria1;
 	private Categoria categoria2;
 	private Categoria categoria3;
+	private Map<String, Object> map_error;
+	private Map<String, Object> map;
 
 
 	@BeforeEach
@@ -35,11 +39,9 @@ class CategoriaControllerTest {
 		categoria2.setId_categoria(10);
 		categoria2.setCat_nombre("Extra");
 		categoria2.setCat_descripcion("Descripcion categoria dos");
+
+
 		
-		categoria3 = new Categoria();
-		categoria3.setId_categoria(15);
-		categoria3.setCat_nombre("Peq");
-		categoria3.setCat_descripcion("Categoria con nombre incorrecto");
 	
 	}
 	
@@ -60,25 +62,31 @@ class CategoriaControllerTest {
 
 	@Test
 	void testLeerUno() {
-		Mensajes m1 = new Mensajes("200", "", categoria1);
-		when(controlador.leerUno("5")).thenReturn(m1);	
-		Mensajes res = controlador.leerUno("5");
-		Assertions.assertEquals(res,m1);
+		map= new LinkedHashMap<String, Object>();
+		map.put("Estado", 200);
+		map.put("Mensaje", "");
+		map.put("Categoria", categoria1);
+		when(controlador.leerUno("5")).thenReturn(map);	
+		Assertions.assertEquals(map,controlador.leerUno("5"));
 	}
 	@Test
 	void testLeerUno_2() {
-		Mensajes m1 = new Mensajes("200", "", categoria1);
-		when(controlador.leerUno("5")).thenReturn(m1);	
-		Mensajes res = controlador.leerUno("10");
-		Assertions.assertNotEquals(res,m1);
+		map= new LinkedHashMap<String, Object>();
+		map.put("Estado", 200);
+		map.put("Mensaje", "");
+		map.put("Categoria", categoria1);
+		when(controlador.leerUno("5")).thenReturn(map);	
+		Assertions.assertNotEquals(controlador.leerUno("10"),map);
 	}
 	
 	@Test
 	void testLeerUno_Exception() {
-		Mensajes m1 = new Mensajes("500", "Categoria no existe",null);
-		when(controlador.leerUno("90")).thenReturn(m1);	
-		Mensajes res = controlador.leerUno("90");
-		Assertions.assertEquals(res,m1);
+		map_error= new LinkedHashMap<String, Object>();
+		map_error.put("Estado", 500);
+		map_error.put("Mensaje", "Categoria no existe");
+		map_error.put("Categoria", null);
+		when(controlador.leerUno("90")).thenReturn(map_error);	
+		Assertions.assertEquals(controlador.leerUno("90"),map_error);
 	
 	}
 	
@@ -86,82 +94,76 @@ class CategoriaControllerTest {
 	
 	@Test
 	void testActualizar() {
-		Mensajes m1 = new Mensajes("200", "Categoria actualizada", categoria1);
-		when(controlador.actualizar(categoria1)).thenReturn(m1);
-		Mensajes res = controlador.actualizar(categoria1);
-		Assertions.assertEquals(res,m1);
+		map= new LinkedHashMap<String, Object>();
+		map.put("Estado", 200);
+		map.put("Mensaje", "Categoria actualizada");
+		map.put("Categoria", categoria1);
+		when(controlador.actualizar(categoria1)).thenReturn(map);
+		Assertions.assertEquals(controlador.actualizar(categoria1),map);
 
 	}
 	
 	
 	@Test
 	void testActualizar_Exception() {
-		Mensajes m1 =new Mensajes("500", "Error actualizacion", null);
-		when(controlador.actualizar(categoria3)).thenReturn(m1);	
-		Mensajes res = controlador.actualizar(categoria3);
-		Assertions.assertEquals(res,m1);
+		map_error= new LinkedHashMap<String, Object>();
+		map_error.put("Estado", 500);
+		map_error.put("Mensaje", "Error actualizacion");
+		map_error.put("Categoria", null);
+		when(controlador.actualizar(categoria3)).thenReturn(map_error);	
+		Assertions.assertEquals(controlador.actualizar(categoria3),map_error);
 	}
 	
 	@Test
 	void testActualizar_2() {
-		Mensajes m1 = new Mensajes("200", "Categoria actualizada", categoria1);
-		when(controlador.actualizar(categoria1)).thenReturn(m1);
-		Mensajes res = controlador.actualizar(categoria2);
-		Assertions.assertNotEquals(res,m1);
+		map= new LinkedHashMap<String, Object>();
+		map.put("Estado", 200);
+		map.put("Mensaje", "Categoria actualizada");
+		map.put("Categoria", categoria1);
+		when(controlador.actualizar(categoria1)).thenReturn(map);
+		Assertions.assertNotEquals(controlador.actualizar(categoria2),map);
 
 	}
 
 	@Test
-	void testDeleteCategoria() {
-		Mensajes m1 = new Mensajes("200", "Categoria eliminada", categoria1);
-		when(controlador.delete(categoria1)).thenReturn(m1);
-		Mensajes res = controlador.delete(categoria1);
-		Assertions.assertEquals(res,m1);
+	void testDeleteCategoriaById() {
+		map= new LinkedHashMap<String, Object>();
+		map.put("Estado", 200);
+		map.put("Mensaje", "Categoria eliminada");
+		map.put("Categoria", categoria1);
+		when(controlador.delete("5")).thenReturn(map);
+		Assertions.assertEquals(controlador.delete("5"),map);
 	}
 	@Test
-	void testDeleteCategoria_2() {
-		Mensajes m1 = new Mensajes("200", "Categoria eliminada", categoria1);
-		when(controlador.delete(categoria1)).thenReturn(m1);
-		Mensajes res = controlador.delete(categoria2);
-		Assertions.assertNotEquals(res,m1);
+	void testDeleteCategoriaById_2() {
+		map= new LinkedHashMap<String, Object>();
+		map.put("Estado", 200);
+		map.put("Mensaje", "Categoria eliminada");
+		map.put("Categoria", categoria1);
+		when(controlador.delete("10")).thenReturn(map);
+		Assertions.assertNotEquals(controlador.delete("5"),map);
 	}
 
-	@Test
-	void testDeleteString() {
-		Mensajes m1 = new Mensajes("200", "Categoria eliminada", null);
-		when(controlador.delete("5")).thenReturn(m1);
-		Mensajes res = controlador.delete("5");
-		Assertions.assertEquals(res,m1);
-	}
 	
 	@Test
-	void testDeleteString_2() {
-		Mensajes m1 = new Mensajes("200", "Categoria eliminada", null);
-		when(controlador.delete("5")).thenReturn(m1);
-		Mensajes res = controlador.delete("10");
-		Assertions.assertNotEquals(res,m1);
-	}
-
-	@Test
 	void testInsert() {
-		Mensajes m1 = new Mensajes("200", "Categoria insertada", null);
-		when(controlador.insert(categoria1)).thenReturn(m1);
-		Mensajes res = controlador.insert(categoria1);
-		Assertions.assertEquals(res,m1);
+		map= new LinkedHashMap<String, Object>();
+		map.put("Estado", 200);
+		map.put("Mensaje", "Categoria insertada");
+		map.put("Categoria", null);
+		when(controlador.insert(categoria1)).thenReturn(map);
+		Assertions.assertEquals(controlador.insert(categoria1),map);
 	}
 	@Test
 	void testInsert_2() {
-		Mensajes m1 = new Mensajes("200", "Categoria insertada", null);
-		when(controlador.insert(categoria1)).thenReturn(m1);
-		Mensajes res = controlador.insert(categoria2);
-		Assertions.assertNotEquals(res,m1);
+		map= new LinkedHashMap<String, Object>();
+		map.put("Estado", 200);
+		map.put("Mensaje", "Categoria insertada");
+		map.put("Categoria", null);
+		when(controlador.insert(categoria1)).thenReturn(map);
+	
+		Assertions.assertNotEquals(controlador.insert(categoria2),map);
 	}
-	@Test
-	void testInsertar_Exception() {
-		Mensajes m1 =new  Mensajes("500", "Error insertar categoria", null);
-		when(controlador.insert(categoria3)).thenReturn(m1);	
-		Mensajes res = controlador.insert(categoria3);
-		Assertions.assertEquals(res,m1);
-	}
+	
 
 }

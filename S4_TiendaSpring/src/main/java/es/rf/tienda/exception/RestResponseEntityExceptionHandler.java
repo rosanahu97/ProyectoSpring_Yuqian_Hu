@@ -16,6 +16,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler  {
 
+	String MI_RUTA = "es.rf.tienda";
+	int MI_RUTA_LENGTH = MI_RUTA.length();
 	
 	@ExceptionHandler(value = { 
 			DomainException.class,
@@ -51,13 +53,22 @@ public class RestResponseEntityExceptionHandler  {
 
 	private Map<String, Object> montaError(Exception ex, String mensaje, HttpStatus conflict) {
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
+		String miPaquete = this.getClass().getPackageName();
+		System.out.println(miPaquete);
+		/* *************************************************************************
+		 * obtener paquete base de spring.....
+		 */
 		map.clear();
 		map.put("status", 0);
 		map.put("message", mensaje);
-		// getStackTrace se deberia filtrar por  "className": "es.rf.tienda.
+		// getStackTrace se deberia filtrar por "className": "es.rf.tienda.
 		// Array de objetos
-//		Object[] stack = Arrays.stream(ex.getStackTrace()).map(s->s.getClassName()).filter(s->s.truncate(12).equals("es.rf.tienda")).collect(toString());
-		map.put("stacktrace", ex.getStackTrace());
+		StackTraceElement[] ste = ex.getStackTrace();
+		StackTraceElement[] stack = Arrays.stream(ste)
+				.peek(s->System.out.println(s.getClassName()))
+				.filter(s ->  s.getClassName().length() < MI_RUTA_LENGTH ? false :  s.getClassName().substring(0, MI_RUTA_LENGTH).equals(MI_RUTA))
+				.toArray(StackTraceElement[]::new);
+		map.put("stacktrace", stack);
 		return map;
 	}
 }

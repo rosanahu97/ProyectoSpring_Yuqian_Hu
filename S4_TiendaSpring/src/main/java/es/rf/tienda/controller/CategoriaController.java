@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import es.rf.tienda.service.IServicio;
 import es.rf.tienda.util.Mensajes;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/Categoria")
 public class CategoriaController {
 
@@ -72,7 +74,10 @@ public class CategoriaController {
 
 		}
 	}
-
+	@DeleteMapping
+	public Map<String, Object> delete(@RequestBody Categoria categoria) {
+		return delete(categoria.getId_categoria()+"");
+	}
 
 	@DeleteMapping("/{id}")
 	public Map<String, Object> delete(@PathVariable("id") String categoria_id) {
